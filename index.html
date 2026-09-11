@@ -17,12 +17,7 @@ header.scrolled{background:var(--bg);box-shadow:0 2px 20px rgba(0,0,0,.5)}.logo{
 <section class="hero" id="hero"><div class="hero-content"><div class="hero-tag" id="heroTag">EM DESTAQUE</div><div class="hero-title" id="heroTitle">Carregando...</div><div class="hero-meta" id="heroMeta"></div><div class="hero-desc" id="heroDesc"></div><div class="hero-actions"><button class="btn btn-primary" aria-label="Assistir trailer">▶</button><button class="btn btn-ghost" aria-label="Adicionar à minha lista">＋</button></div></div></section>
 <main class="rows" id="rows"></main><footer>KOPS — feito por vocês, pra vocês.</footer>
 <script>
-const <iframe
-src="https://superflixhd.epizy.com/embed-2/?
-type=tvshows&imdb=tt2193021"
-width="100%" height="500"
-allowfullscreen="true" scrolling="no"
-frameborder="0"></iframe>=null;
+const  <iframe src="https://superflixhd.epizy.com/embed-2/?type=tvshows&imdb=tt2193021" allow="autoplay *; encrypted-media *; picture-in-picture *; fullscreen *; clipboard-write *; accelerometer *; gyroscope *" allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0" scrolling="no"></iframe>=null;
 function adaptMovie(raw){return{id:raw.id,title:raw.title??raw.titulo,year:raw.year??raw.ano,poster:raw.poster??raw.poster_url,backdrop:raw.backdrop??raw.poster??raw.poster_url,rating:raw.rating??raw.nota,genre:raw.genre??raw.genero,synopsis:raw.synopsis??raw.sinopse,watchedBy:raw.watchedBy??raw.assistido_por??[]}}
 const MOCK_MOVIES=[
 {id:1,title:'Sombras de Neon',year:2023,genre:'Ficção',rating:8.7,poster:'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&h=600&fit=crop',backdrop:'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1600&h=900&fit=crop',synopsis:'Numa cidade tomada por letreiros de neon, um detetive persegue uma verdade que ninguém quer encontrar.',watchedBy:['G','T']},
