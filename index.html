@@ -1,39 +1,220 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KOPS</title>
-<style>
-:root{--bg:#000;--bg-raised:#0A0A0A;--ink:#EDEAE3;--ink-dim:#8A9690;--accent:#00E676;--accent-dim:#0A5C33;--gold:#39FF88;--radius:14px}
-*{box-sizing:border-box;margin:0;padding:0}html,body{background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif;overflow-x:hidden;scroll-behavior:smooth}
-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 5vw;background:linear-gradient(to bottom,rgba(0,0,0,.95),transparent);transition:.3s}
-header.scrolled{background:var(--bg);box-shadow:0 2px 20px rgba(0,0,0,.5)}.logo{font-size:28px;font-weight:800;letter-spacing:3px;color:var(--accent)}nav ul{display:flex;gap:28px;list-style:none}nav a{color:var(--ink-dim);text-decoration:none;font-size:14px;cursor:pointer}nav a:hover,nav a.active{color:var(--ink)}.search-box input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--ink);padding:8px 14px;border-radius:20px;font-size:13px;width:180px;outline:none}.search-box input:focus{width:240px}
-.hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:flex-end;padding:0 5vw 64px;background-size:cover;background-position:center 20%}.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 2%,transparent 45%),linear-gradient(to right,rgba(0,0,0,.85) 15%,transparent 60%)}.hero-content{position:relative;max-width:560px}.hero-tag{color:var(--gold);font-size:13px;font-weight:600;margin-bottom:14px}.hero-title{font-size:clamp(42px,6vw,76px);font-weight:800;line-height:.95;margin-bottom:18px}.hero-meta{display:flex;gap:14px;color:var(--ink-dim);font-size:14px;margin-bottom:18px}.rating{color:var(--gold);font-weight:700}.hero-desc{color:var(--ink-dim);font-size:15px;line-height:1.6;margin-bottom:28px;max-width:480px}.hero-actions{display:flex;gap:14px}.btn{border:none;border-radius:50%;width:54px;height:54px;cursor:pointer;display:flex;align-items:center;justify-content:center}.btn-primary{background:var(--ink);color:var(--bg)}.btn-ghost{background:rgba(255,255,255,.1);color:var(--ink);border:1px solid rgba(255,255,255,.15)}
-.rows{position:relative;z-index:2;margin-top:-80px;padding-bottom:80px}.row{margin-bottom:42px}.row-head{display:flex;justify-content:space-between;padding:0 5vw;margin-bottom:14px}.row-title{font-size:18px;font-weight:700}.row-count,.empty{color:var(--ink-dim);font-size:13px}.row-track{display:flex;gap:12px;overflow-x:auto;padding:4px 5vw 20px}.card{position:relative;flex:0 0 180px;border-radius:var(--radius);overflow:hidden;cursor:pointer;background:var(--bg-raised);box-shadow:0 6px 16px rgba(0,0,0,.55);transition:.25s}.card:hover{transform:translateY(-6px) scale(1.04);box-shadow:0 18px 36px rgba(0,230,118,.18),0 16px 32px rgba(0,0,0,.7)}.card-poster{width:100%;aspect-ratio:2/3;background-size:cover;background-position:center;display:flex;align-items:flex-end;position:relative}.card-poster:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85),transparent 45%);opacity:0;transition:.2s}.card:hover .card-poster:after{opacity:1}.card-info{position:relative;padding:10px;opacity:0;transform:translateY(6px);transition:.2s}.card:hover .card-info{opacity:1;transform:translateY(0)}.card-info .t{font-size:13px;font-weight:700;margin-bottom:4px}.card-info .m{font-size:11px;color:var(--ink-dim);display:flex;gap:8px}.card-info .r{color:var(--gold)}.who-badge{position:absolute;top:8px;left:8px;display:flex;gap:4px}.avatar{width:24px;height:24px;border-radius:50%;background:var(--accent-dim);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}.empty{padding:4px 5vw 20px}footer{text-align:center;padding:40px 5vw;color:var(--ink-dim);font-size:12px;border-top:1px solid rgba(255,255,255,.06)}
-@media(max-width:720px){nav ul{display:none}.search-box input{width:120px}.search-box input:focus{width:160px}.card{flex-basis:130px}}
-</style></head><body>
-<header id="siteHeader"><div class="logo">KOPS</div><nav><ul><li><a class="active">Início</a></li><li><a>Filmes</a></li><li><a>Assistidos</a></li><li><a>Amigos</a></li></ul></nav><div class="search-box"><input id="searchInput" type="text" placeholder="Buscar filme..."></div></header>
-<section class="hero" id="hero"><div class="hero-content"><div class="hero-tag" id="heroTag">EM DESTAQUE</div><div class="hero-title" id="heroTitle">Carregando...</div><div class="hero-meta" id="heroMeta"></div><div class="hero-desc" id="heroDesc"></div><div class="hero-actions"><button class="btn btn-primary" aria-label="Assistir trailer">▶</button><button class="btn btn-ghost" aria-label="Adicionar à minha lista">＋</button></div></div></section>
-<main class="rows" id="rows"></main><footer>KOPS — feito por vocês, pra vocês.</footer>
-<script>
-// Coloque aqui somente a URL da API de vocês.
-const "https://superflixhd.epizy.com/embed-2/?type=tvshows&imdb=tt2193021" = null;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOPS | Streaming</title>
+    <style>
+        :root{--bg:#000;--bg-raised:#0A0A0A;--ink:#EDEAE3;--ink-dim:#8A9690;--accent:#00E676;--accent-dim:#0A5C33;--gold:#39FF88;--radius:14px}
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif;overflow-x:hidden;scroll-behavior:smooth}
+        
+        header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 5vw;background:linear-gradient(to bottom,rgba(0,0,0,.95),transparent);transition:.3s}
+        header.scrolled{background:var(--bg);box-shadow:0 2px 20px rgba(0,0,0,.5)}
+        .logo{font-size:28px;font-weight:800;letter-spacing:3px;color:var(--accent);cursor:pointer}
+        
+        nav ul{display:flex;gap:28px;list-style:none}
+        nav a{color:var(--ink-dim);text-decoration:none;font-size:14px;cursor:pointer;transition:.2s}
+        nav a:hover,nav a.active{color:var(--ink)}
+        
+        .search-box input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--ink);padding:8px 14px;border-radius:20px;font-size:13px;width:180px;outline:none;transition:.3s}
+        .search-box input:focus{width:240px;border-color:var(--accent)}
 
-function adaptMovie(raw){return{id:raw.id,title:raw.title??raw.titulo,year:raw.year??raw.ano,poster:raw.poster??raw.poster_url,backdrop:raw.backdrop??raw.poster??raw.poster_url,rating:raw.rating??raw.nota,genre:raw.genre??raw.genero,synopsis:raw.synopsis??raw.sinopse,watchedBy:raw.watchedBy??raw.assistido_por??[]}}
-const MOCK_MOVIES=[
-{id:1,title:'Sombras de Neon',year:2023,genre:'Ficção',rating:8.7,poster:'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&h=600&fit=crop',backdrop:'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1600&h=900&fit=crop',synopsis:'Numa cidade tomada por letreiros de neon, um detetive persegue uma verdade que ninguém quer encontrar.',watchedBy:['G','T']},
-{id:2,title:'O Último Verão',year:2022,genre:'Drama',rating:9.1,poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=600&fit=crop',backdrop:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1600&h=900&fit=crop',synopsis:'Quatro amigos, uma casa de praia e o verão que muda tudo antes da faculdade.',watchedBy:['G','M','T']},
-{id:3,title:'Estrada Sem Fim',year:2021,genre:'Aventura',rating:7.9,poster:'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&h=600&fit=crop',backdrop:'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=1600&h=900&fit=crop',synopsis:'Um road trip de motocicleta pelo interior vira jornada de autoconhecimento.',watchedBy:['M']},
-{id:4,title:'Constelação',year:2024,genre:'Ficção',rating:8.3,poster:'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=600&fit=crop',backdrop:'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1600&h=900&fit=crop',synopsis:'Uma astrônoma recebe um sinal que reescreve tudo que sabemos sobre o universo.',watchedBy:[]},
-{id:5,title:'Café da Manhã às 3h',year:2023,genre:'Comédia',rating:8,poster:'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?w=400&h=600&fit=crop',backdrop:'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?w=1600&h=900&fit=crop',synopsis:'Uma cozinha comercial de madrugada, três estranhos, e uma noite que ninguém esquece.',watchedBy:['G']},
-{id:6,title:'Território Selvagem',year:2020,genre:'Documentário',rating:9.4,poster:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=600&fit=crop',backdrop:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1600&h=900&fit=crop',synopsis:'Três anos acompanhando uma manada pelas planícies mais remotas do planeta.',watchedBy:['T','M']},
-{id:7,title:'Vértice',year:2022,genre:'Suspense',rating:7.6,poster:'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&h=600&fit=crop',backdrop:'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1600&h=900&fit=crop',synopsis:'Seis pessoas, um elevador preso entre andares, e um segredo que só um deles conhece.',watchedBy:[]},
-{id:8,title:'Maré Baixa',year:2024,genre:'Drama',rating:8.5,poster:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop',backdrop:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop',synopsis:'Uma pescadora retorna à cidade natal e encontra tudo — e todos — mudados.',watchedBy:['G','T']}];
-async function fetchMovies(){if(!MOVIE_API_URL)return MOCK_MOVIES;try{const res=await fetch(MOVIE_API_URL);if(!res.ok)throw Error('API '+res.status);const data=await res.json();return(Array.isArray(data)?data:(data.results??data.filmes??[])).map(adaptMovie)}catch(e){console.error(e);return MOCK_MOVIES}}
-function cardHTML(m){const badges=(m.watchedBy||[]).slice(0,3).map(w=>`<div class="avatar">${w}</div>`).join('');return`<div class="card" data-id="${m.id}"><div class="card-poster" style="background-image:url('${m.poster}')"><div class="who-badge">${badges}</div></div><div class="card-info"><div class="t">${m.title}</div><div class="m"><span>${m.year}</span><span class="r">★ ${m.rating}</span></div></div></div>`}
-function rowHTML(title,movies){if(!movies.length)return`<div class="row"><div class="row-head"><div class="row-title">${title}</div></div><div class="empty">Nenhum filme por aqui ainda.</div></div>`;return`<div class="row"><div class="row-head"><div class="row-title">${title}</div><div class="row-count">${movies.length} título${movies.length>1?'s':''}</div></div><div class="row-track">${movies.map(cardHTML).join('')}</div></div>`}
-function setHero(m){document.getElementById('hero').style.backgroundImage=`url('${m.backdrop}')`;document.getElementById('heroTag').textContent=m.watchedBy?.length?'MAIS ASSISTIDO':'RECÉM ADICIONADO';document.getElementById('heroTitle').textContent=m.title;document.getElementById('heroMeta').innerHTML=`<span class="rating">★ ${m.rating}</span><span>${m.year}</span><span>${m.genre}</span>`;document.getElementById('heroDesc').textContent=m.synopsis}
-async function boot(){const movies=await fetchMovies();if(!movies.length){document.getElementById('rows').innerHTML='<div class="empty">A API não retornou nenhum filme ainda.</div>';return}setHero(movies[Math.floor(Math.random()*movies.length)]);const genres={};movies.forEach(m=>(genres[m.genre]??=[]).push(m));const watched=movies.filter(m=>(m.watchedBy||[]).length);const unwatched=movies.filter(m=>!(m.watchedBy||[]).length);let html=rowHTML('Todos os filmes',movies);if(watched.length)html+=rowHTML('Já assistidos pela galera',watched);if(unwatched.length)html+=rowHTML('Ainda ninguém viu',unwatched);Object.entries(genres).forEach(([g,l])=>html+=rowHTML(g,l));document.getElementById('rows').innerHTML=html)}
-boot();window.addEventListener('scroll',()=>document.getElementById('siteHeader').classList.toggle('scrolled',scrollY>40));document.getElementById('searchInput').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();document.querySelectorAll('.card').forEach(c=>c.style.display=c.querySelector('.t').textContent.toLowerCase().includes(q)?'':'none')});
-</script></body></html>
+        .hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:flex-end;padding:0 5vw 64px;background-size:cover;background-position:center;transition:.5s}
+        .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 2%,transparent 45%),linear-gradient(to right,rgba(0,0,0,.85) 15%,transparent 60%)}
+        .hero-content{position:relative;max-width:560px;z-index:1}
+        .hero-tag{color:var(--gold);font-size:13px;font-weight:600;margin-bottom:14px}
+        .hero-title{font-size:clamp(42px,6vw,76px);font-weight:800;line-height:.95;margin-bottom:18px}
+        .hero-meta{display:flex;gap:14px;color:var(--ink-dim);font-size:14px;margin-bottom:18px}
+        .rating{color:var(--gold);font-weight:700}
+        .hero-desc{color:var(--ink-dim);font-size:15px;line-height:1.6;margin-bottom:28px;max-width:480px}
+        .hero-actions{display:flex;gap:14px}
+        
+        .btn{border:none;border-radius:50%;width:54px;height:54px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+        .btn-primary{background:var(--ink);color:var(--bg);font-size:20px}
+        .btn-ghost{background:rgba(255,255,255,.1);color:var(--ink);border:1px solid rgba(255,255,255,.15)}
+        .btn:hover{transform:scale(1.1)}
+
+        .rows{position:relative;z-index:2;margin-top:-80px;padding-bottom:80px}
+        .row{margin-bottom:42px}
+        .row-head{display:flex;justify-content:space-between;padding:0 5vw;margin-bottom:14px}
+        .row-title{font-size:18px;font-weight:700}
+        .row-count{color:var(--ink-dim);font-size:13px}
+        .row-track{display:flex;gap:12px;overflow-x:auto;padding:4px 5vw 20px;scrollbar-width:none}
+        .row-track::-webkit-scrollbar{display:none}
+
+        .card{position:relative;flex:0 0 180px;border-radius:var(--radius);overflow:hidden;cursor:pointer;background:var(--bg-raised);box-shadow:0 6px 16px rgba(0,0,0,.55);transition:.25s}
+        .card:hover{transform:translateY(-6px) scale(1.04);box-shadow:0 18px 36px rgba(0,230,118,.18),0 16px 32px rgba(0,0,0,.7)}
+        .card-poster{width:100%;aspect-ratio:2/3;background-size:cover;background-position:center;display:flex;align-items:flex-end;position:relative}
+        .card-poster:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85),transparent 45%);opacity:0;transition:.2s}
+        .card:hover .card-poster:after{opacity:1}
+        .card-info{position:relative;padding:10px;opacity:0;transform:translateY(6px);transition:.2s}
+        .card:hover .card-info{opacity:1;transform:translateY(0)}
+        .card-info .t{font-size:13px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .card-info .m{font-size:11px;color:var(--ink-dim);display:flex;gap:8px}
+        .card-info .r{color:var(--gold)}
+
+        /* Modal do Player */
+        #playerModal{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+        #playerModal.active{display:flex}
+        .modal-content{position:relative;width:100%;max-width:1000px;aspect-ratio:16/9;background:#000;border:2px solid var(--accent-dim);border-radius:12px;overflow:hidden}
+        .close-modal{position:absolute;top:-40px;right:0;color:var(--ink);cursor:pointer;font-size:14px;background:none;border:none}
+        iframe{width:100%;height:100%;border:none}
+
+        footer{text-align:center;padding:40px 5vw;color:var(--ink-dim);font-size:12px;border-top:1px solid rgba(255,255,255,.06)}
+        @media(max-width:720px){nav ul{display:none}.search-box input{width:120px}.search-box input:focus{width:160px}.card{flex-basis:130px}}
+    </style>
+</head>
+<body>
+
+<header id="siteHeader">
+    <div class="logo">KOPS</div>
+    <nav>
+        <ul>
+            <li><a class="active">Início</a></li>
+            <li><a onclick="location.reload()">Filmes</a></li>
+            <li><a href="#">Assistidos</a></li>
+            <li><a href="#">Amigos</a></li>
+        </ul>
+    </nav>
+    <div class="search-box">
+        <input id="searchInput" type="text" placeholder="Buscar filme...">
+    </div>
+</header>
+
+<section class="hero" id="hero">
+    <div class="hero-content">
+        <div class="hero-tag" id="heroTag">EM DESTAQUE</div>
+        <div class="hero-title" id="heroTitle">Carregando...</div>
+        <div class="hero-meta" id="heroMeta"></div>
+        <div class="hero-desc" id="heroDesc"></div>
+        <div class="hero-actions">
+            <button class="btn btn-primary" id="heroPlayBtn">▶</button>
+            <button class="btn btn-ghost">＋</button>
+        </div>
+    </div>
+</section>
+
+<main class="rows" id="rows"></main>
+
+<div id="playerModal">
+    <div class="modal-content">
+        <button class="close-modal" id="closeModal">✕ FECHAR PLAYER</button>
+        <iframe id="videoFrame" src="" allowfullscreen></iframe>
+    </div>
+</div>
+
+<footer>KOPS — feito por vocês, pra vocês.</footer>
+
+<script>
+    // CONFIGURAÇÕES DE API
+    const TMDB_API_KEY = '869864497639798864696969696969'; // Substitua pela sua chave real do TMDB
+    const BASE_URL = 'https://api.themoviedb.org/3';
+    const IMG_URL = 'https://image.tmdb.org/t/p/original';
+    const POSTER_URL = 'https://image.tmdb.org/t/p/w500';
+    
+    // URL do seu servidor de Embed (ajustado para aceitar o ID do IMDB ou TMDB)
+    const EMBED_BASE_URL = 'https://superflixhd.epizy.com/embed-2/?type=movies&imdb=';
+
+    async function fetchMovies(endpoint) {
+        try {
+            const res = await fetch(`${BASE_URL}${endpoint}?api_key=${TMDB_API_KEY}&language=pt-BR`);
+            const data = await res.json();
+            return data.results || [];
+        } catch (e) {
+            console.error("Erro na API:", e);
+            return [];
+        }
+    }
+
+    function cardHTML(m) {
+        return `
+        <div class="card" onclick="openPlayer('${m.id}')">
+            <div class="card-poster" style="background-image:url('${POSTER_URL + m.poster_path}')"></div>
+            <div class="card-info">
+                <div class="t">${m.title || m.name}</div>
+                <div class="m">
+                    <span>${(m.release_date || '').substring(0,4)}</span>
+                    <span class="r">★ ${m.vote_average.toFixed(1)}</span>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    function rowHTML(title, movies) {
+        if (!movies.length) return '';
+        return `
+        <div class="row">
+            <div class="row-head">
+                <div class="row-title">${title}</div>
+                <div class="row-count">${movies.length} títulos</div>
+            </div>
+            <div class="row-track">${movies.map(cardHTML).join('')}</div>
+        </div>`;
+    }
+
+    function setHero(m) {
+        document.getElementById('hero').style.backgroundImage = `url('${IMG_URL + m.backdrop_path}')`;
+        document.getElementById('heroTitle').textContent = m.title || m.name;
+        document.getElementById('heroMeta').innerHTML = `<span class="rating">★ ${m.vote_average.toFixed(1)}</span><span>${(m.release_date || '').substring(0,4)}</span>`;
+        document.getElementById('heroDesc').textContent = m.overview;
+        document.getElementById('heroPlayBtn').onclick = () => openPlayer(m.id);
+    }
+
+    async function openPlayer(id) {
+        // Aqui tentamos pegar o ID do IMDB via TMDB para o seu embed funcionar
+        try {
+            const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${TMDB_API_KEY}`);
+            const data = await res.json();
+            const imdbId = data.imdb_id || id; // Fallback para o ID do TMDB
+            
+            document.getElementById('videoFrame').src = `${EMBED_BASE_URL}${imdbId}`;
+            document.getElementById('playerModal').classList.add('active');
+        } catch (e) {
+            alert("Erro ao carregar o player.");
+        }
+    }
+
+    document.getElementById('closeModal').onclick = () => {
+        document.getElementById('playerModal').classList.remove('active');
+        document.getElementById('videoFrame').src = "";
+    };
+
+    async function boot() {
+        const popular = await fetchMovies('/movie/popular');
+        const topRated = await fetchMovies('/movie/top_rated');
+        const upcoming = await fetchMovies('/movie/upcoming');
+
+        if (!popular.length) {
+            document.getElementById('rows').innerHTML = '<div class="empty">Erro ao carregar filmes. Verifique a API Key.</div>';
+            return;
+        }
+
+        setHero(popular[0]);
+
+        let html = rowHTML('Populares agora', popular);
+        html += rowHTML('Melhores de todos os tempos', topRated);
+        html += rowHTML('Lançamentos', upcoming);
+        
+        document.getElementById('rows').innerHTML = html;
+    }
+
+    boot();
+
+    window.addEventListener('scroll', () => {
+        document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    document.getElementById('searchInput').addEventListener('input', async (e) => {
+        const q = e.target.value.trim();
+        if (q.length < 3) return;
+
+        const res = await fetch(`${BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${q}&language=pt-BR`);
+        const data = await res.json();
+        const movies = data.results || [];
+        
+        document.getElementById('rows').innerHTML = rowHTML(`Resultados para: ${q}`, movies);
+    });
+</script>
+</body>
+</html>
