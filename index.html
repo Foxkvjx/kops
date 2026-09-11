@@ -54,7 +54,6 @@
         .card-info .m{font-size:11px;color:var(--ink-dim);display:flex;gap:8px}
         .card-info .r{color:var(--gold)}
 
-        /* Modal do Player */
         #playerModal{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
         #playerModal.active{display:flex}
         .modal-content{position:relative;width:100%;max-width:1000px;aspect-ratio:16/9;background:#000;border:2px solid var(--accent-dim);border-radius:12px;overflow:hidden}
@@ -71,8 +70,8 @@
     <div class="logo">KOPS</div>
     <nav>
         <ul>
-            <li><a class="active">Início</a></li>
-            <li><a onclick="location.reload()">Filmes</a></li>
+            <li><a class="active" onclick="location.reload()">Início</a></li>
+            <li><a href="#">Filmes</a></li>
             <li><a href="#">Assistidos</a></li>
             <li><a href="#">Amigos</a></li>
         </ul>
@@ -107,14 +106,14 @@
 <footer>KOPS — feito por vocês, pra vocês.</footer>
 
 <script>
-    // CONFIGURAÇÕES DE API
-    const TMDB_API_KEY = '292af2982985d6be6c9785a0cb05102b'; // Substitua pela sua chave real do TMDB
-    const BASE_URL = 'https://superflixapi.monster';
+    // CONFIGURAÇÕES
+    const TMDB_API_KEY = '292af2982985d6be6c9785a0cb05102b'; 
+    const BASE_URL = 'https://api.themoviedb.org/3';
     const IMG_URL = 'https://image.tmdb.org/t/p/original';
     const POSTER_URL = 'https://image.tmdb.org/t/p/w500';
     
-    // URL do seu servidor de Embed (ajustado para aceitar o ID do IMDB ou TMDB)
-    const EMBED_BASE_URL = 'https://superflixhd.epizy.com/embed-2/?type=movies&imdb=';
+    // Provedor de Embed que aceita ID do TMDB diretamente
+    const EMBED_BASE_URL = 'https://vidsrc.to/embed/movie/';
 
     async function fetchMovies(endpoint) {
         try {
@@ -128,13 +127,15 @@
     }
 
     function cardHTML(m) {
+        const poster = m.poster_path ? POSTER_URL + m.poster_path : 'https://via.placeholder.com/500x750?text=Sem+Imagem';
+        const year = (m.release_date || '0000').substring(0,4);
         return `
         <div class="card" onclick="openPlayer('${m.id}')">
-            <div class="card-poster" style="background-image:url('${POSTER_URL + m.poster_path}')"></div>
+            <div class="card-poster" style="background-image:url('${poster}')"></div>
             <div class="card-info">
                 <div class="t">${m.title || m.name}</div>
                 <div class="m">
-                    <span>${(m.release_date || '').substring(0,4)}</span>
+                    <span>${year}</span>
                     <span class="r">★ ${m.vote_average.toFixed(1)}</span>
                 </div>
             </div>
@@ -154,25 +155,18 @@
     }
 
     function setHero(m) {
-        document.getElementById('hero').style.backgroundImage = `url('${IMG_URL + m.backdrop_path}')`;
+        const backdrop = m.backdrop_path ? IMG_URL + m.backdrop_path : '';
+        document.getElementById('hero').style.backgroundImage = `url('${backdrop}')`;
         document.getElementById('heroTitle').textContent = m.title || m.name;
-        document.getElementById('heroMeta').innerHTML = `<span class="rating">★ ${m.vote_average.toFixed(1)}</span><span>${(m.release_date || '').substring(0,4)}</span>`;
-        document.getElementById('heroDesc').textContent = m.overview;
+        document.getElementById('heroMeta').innerHTML = `<span class="rating">★ ${m.vote_average.toFixed(1)}</span><span>${(m.release_date || '0000').substring(0,4)}</span>`;
+        document.getElementById('heroDesc').textContent = m.overview || 'Sem descrição disponível.';
         document.getElementById('heroPlayBtn').onclick = () => openPlayer(m.id);
     }
 
-    async function openPlayer(id) {
-        // Aqui tentamos pegar o ID do IMDB via TMDB para o seu embed funcionar
-        try {
-            const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${TMDB_API_KEY}`);
-            const data = await res.json();
-            const imdbId = data.imdb_id || id; // Fallback para o ID do TMDB
-            
-            document.getElementById('videoFrame').src = `${EMBED_BASE_URL}${imdbId}`;
-            document.getElementById('playerModal').classList.add('active');
-        } catch (e) {
-            alert("Erro ao carregar o player.");
-        }
+    function openPlayer(id) {
+        // Monta a URL do embed usando o ID do TMDB
+        document.getElementById('videoFrame').src = `${EMBED_BASE_URL}${id}`;
+        document.getElementById('playerModal').classList.add('active');
     }
 
     document.getElementById('closeModal').onclick = () => {
@@ -180,41 +174,105 @@
         document.getElementById('videoFrame').src = "";
     };
 
-    async function boot() {
-        const popular = await fetchMovies('/movie/popular');
-        const topRated = await fetchMovies('/movie/top_rated');
-        const upcoming = await fetchMovies('/movie/upcoming');
+    async function boot() {```javascript
+const popular = await fetchMovies('/movie/popular');
+const topRated = await fetchMovies('/movie/top_rated');
+const upcoming = await fetchMovies('/movie/upcoming');
 
-        if (!popular.length) {
-            document.getElementById('rows').innerHTML = '<div class="empty">Erro ao carregar filmes. Verifique a API Key.</div>';
-            return;
-        }
+if (!popular.length) {
+document.getElementById('rows').innerHTML = '<div class="empty">Erro ao carregar filmes. Verifique a API Key.</div>';
+return;
+}
 
-        setHero(popular[0]);
+setHero(popular);
 
-        let html = rowHTML('Populares agora', popular);
-        html += rowHTML('Melhores de todos os tempos', topRated);
-        html += rowHTML('Lançamentos', upcoming);
-        
-        document.getElementById('rows').innerHTML = html;
-    }
+let html = rowHTML('Populares agora', popular);
+html += rowHTML('Melhores de todos os tempos', topRated);
+html += rowHTML('Lançamentos', upcoming);
 
-    boot();
+document.getElementById('rows').innerHTML = html;
+}
 
-    window.addEventListener('scroll', () => {
-        document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 40);
-    });
+boot();
 
-    document.getElementById('searchInput').addEventListener('input', async (e) => {
-        const q = e.target.value.trim();
-        if (q.length < 3) return;
+window.addEventListener('scroll', () => {
+document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 40);
+});
 
-        const res = await fetch(`${BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${q}&language=pt-BR`);
-        const data = await res.json();
-        const movies = data.results || [];
-        
-        document.getElementById('rows').innerHTML = rowHTML(`Resultados para: ${q}`, movies);
-    });
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', (e) => {
+const q = e.target.value.trim();
+clearTimeout(searchTimeout);
+
+if (q.length < 3) return;
+
+searchTimeout = setTimeout(async () => {
+try {
+const res = await fetch(`${BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(q)}&language=pt-BR`);
+const data = await res.json();
+const movies = data.results || [];
+document.getElementById('rows').innerHTML = rowHTML(`Resultados para: ${q}`, movies);
+} catch (err) {
+console.error("Erro na busca:", err);
+}
+}, 500);
+});
+</script>
+</body>
+</html>
+``````javascript
+boot();
+
+window.addEventListener('scroll', () => {
+document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', (e) => {
+const q = e.target.value.trim();
+clearTimeout(searchTimeout);
+
+if (q.length < 3) return;
+
+searchTimeout = setTimeout(async () => {
+try {
+const res = await fetch(`${BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(q)}&language=pt-BR`);
+const data = await res.json();
+const movies = data.results || [];
+document.getElementById('rows').innerHTML = rowHTML(`Resultados para: ${q}`, movies);
+} catch (err) {
+console.error("Erro na busca:", err);
+}
+}, 500);
+});
+</script>
+</body>
+</html>
+``````javascript
+boot();
+
+window.addEventListener('scroll', () => {
+document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', (e) => {
+const q = e.target.value.trim();
+clearTimeout(searchTimeout);
+
+if (q.length < 3) return;
+
+searchTimeout = setTimeout(async () => {
+try {
+const res = await fetch(`${BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(q)}&language=pt-BR`);
+const data = await res.json();
+const movies = data.results || [];
+document.getElementById('rows').innerHTML = rowHTML(`Resultados para: ${q}`, movies);
+} catch (err) {
+console.error("Erro na busca:", err);
+}
+}, 500);
+});
 </script>
 </body>
 </html>
